@@ -13,7 +13,13 @@ const crypto = require('crypto');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ["https://invoice-generator-app-ecommerce-dynamic.vercel.app/"],
+    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"]
+  })
+);
 mongoose
   .connect(process.env.DATABSE_URL, {
     useNewUrlParser: true,
