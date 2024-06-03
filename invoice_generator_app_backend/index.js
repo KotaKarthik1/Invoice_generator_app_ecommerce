@@ -14,12 +14,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
-app.use(
-  cors({
-    origin: ["https://invoice-generator-app-ecommerce-dynamic.vercel.app/"],
-    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"]
-  })
-);
+const cors = require('cors');
+app.use(cors({
+    origin: 'https://invoice-generator-app-ecommerce-dynamic.vercel.app', // Replace with your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 mongoose
   .connect(process.env.DATABSE_URL, {
     useNewUrlParser: true,
