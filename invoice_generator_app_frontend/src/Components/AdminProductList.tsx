@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../Context/AuthContext";
-import AddProductList from "./AddProductList";
 import ProductCard from "./ProductCardAdmin";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +35,7 @@ function AdminProductList() {
       const token = localStorage.getItem("token");
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const response = await axios.get(
-        `http://localhost:3000/api/getProductsAdmin?id=${localStorage.getItem(
+        `https://invoice-generator-app-ecommerce.vercel.app/api/getProductsAdmin?id=${localStorage.getItem(
           "id"
         )}`
       );

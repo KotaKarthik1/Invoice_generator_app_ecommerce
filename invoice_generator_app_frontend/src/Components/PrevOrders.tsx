@@ -32,7 +32,7 @@ const PrevOrders: React.FC = () => {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         console.log("in fetch")
         const response = await axios.get<Order[]>(
-          `http://localhost:3000/api/orders?id=${localStorage.getItem(
+          `https://invoice-generator-app-ecommerce.vercel.app/api/orders?id=${localStorage.getItem(
             "id"
           )}`
         );

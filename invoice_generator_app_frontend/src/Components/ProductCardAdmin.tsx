@@ -44,7 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     try {
         const token = localStorage.getItem("token");
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      await axios.patch(`http://localhost:3000/api/editProductAdmin/${product._id}?id=${localStorage.getItem(
+      await axios.patch(`https://invoice-generator-app-ecommerce.vercel.app/api/editProductAdmin/${product._id}?id=${localStorage.getItem(
         "id"
       )}`, {
         quantity: editedQuantity,

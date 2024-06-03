@@ -17,7 +17,7 @@ function AddProductList() {
     }
 
     try {
-      const response = await axios.post(`http://localhost:3000/api/addProductsToList?id=${localStorage.getItem(
+      const response = await axios.post(`https://invoice-generator-app-ecommerce.vercel.app/api/addProductsToList?id=${localStorage.getItem(
         "id"
       )}`, {
         name: newProductName,

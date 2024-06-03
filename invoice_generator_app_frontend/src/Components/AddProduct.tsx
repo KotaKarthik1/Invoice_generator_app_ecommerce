@@ -29,7 +29,7 @@ export default function ProductList() {
       const token = localStorage.getItem("token");
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const response = await axios.get(
-        `http://localhost:3000/api/getProductsUser?id=${localStorage.getItem("id")}`
+        `https://invoice-generator-app-ecommerce.vercel.app/api/getProductsUser?id=${localStorage.getItem("id")}`
       );
       setProducts(response.data);
     } catch (error) {
@@ -77,7 +77,7 @@ export default function ProductList() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `http://localhost:3000/api/generateInvoice?id=${localStorage.getItem("id")}`,
+        `https://invoice-generator-app-ecommerce.vercel.app/api/generateInvoice?id=${localStorage.getItem("id")}`,
         { cart },
         {
           headers: {

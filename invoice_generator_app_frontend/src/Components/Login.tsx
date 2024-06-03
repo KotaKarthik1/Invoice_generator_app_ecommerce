@@ -20,7 +20,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/login', { email, password });
+      const response = await axios.post('https://invoice-generator-app-ecommerce.vercel.app/api/login', { email, password });
       const { token, role, id } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('id', id);

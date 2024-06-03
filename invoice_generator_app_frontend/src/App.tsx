@@ -2,12 +2,10 @@ import { BrowserRouter, Route, Routes, Navigate, useNavigate } from "react-route
 import "./App.css";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import GeneratedPdf from "./Components/GeneratedPdf";
 import AddProduct from "./Components/AddProduct";
 import AddProductList from "./Components/AddProductList";
 import { useAuth, AuthProvider } from "./Context/AuthContext";
 import AdminProductList from "./Components/AdminProductList";
-import Cart from "./Components/Cart";
 import PrevOrders from "./Components/PrevOrders";
 
 function Welcomepage() {
@@ -46,7 +44,6 @@ function App() {
           <Route path="/" element={<Welcomepage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/GeneratedPdf" element={<ProtectedRoute><GeneratedPdf /></ProtectedRoute>} />
           <Route path="/AddProduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
           <Route path="/prevorders" element={<ProtectedRoute><PrevOrders/></ProtectedRoute>} />
           <Route path="/AddProductList" element={<ProtectedRouteAdmin><AddProductList /></ProtectedRouteAdmin>} />

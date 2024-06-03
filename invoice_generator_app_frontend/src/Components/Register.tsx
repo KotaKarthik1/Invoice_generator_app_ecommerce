@@ -25,7 +25,7 @@ function Register() {
     }
 
     try {
-      await axios.post('http://localhost:3000/api/register', { name, email, password });
+      await axios.post('https://invoice-generator-app-ecommerce.vercel.app/api/register', { name, email, password });
       navigate('/');
     } catch (error: any) {
       if (error.response) {
