@@ -14,7 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
-const cors = require('cors');
 app.use(cors({
     origin: 'https://invoice-generator-app-ecommerce-dynamic.vercel.app', // Replace with your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
