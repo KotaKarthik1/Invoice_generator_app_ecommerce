@@ -24,7 +24,8 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
   });
 
   //invoicegenerator
-  const generateInvoiceHTML = (invoice) => {
+  const generateInvoiceHTML = (invoiceDetails) => {
+    console.log("inside the function",invoiceDetails);
     // Implement the HTML structure here using the invoice data
     return `
     <!DOCTYPE html>
@@ -112,20 +113,20 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
     <div class="header">
       <h1>Invoice Generator App</h1>
       <div>
-        <p>User: ${invoice.user.name}</p>
-        <p>Date: ${new Date(invoice.date).toLocaleDateString()}</p>
+        <p>User: ${invoiceDetails.name}</p>
+        <p>Date: ${new Date()}</p>
       </div>
     </div>
     <div class="invoice-info">
       <div>
         <h2>Billing To:</h2>
-        <p>${invoice.user.name}</p>
-        <p>${invoice.user.email}</p>
+        <p>${invoiceDetails.name}</p>
+        <p>${invoiceDetails.email}</p>
       </div>
       <div>
         <h2>Invoice Details:</h2>
-        <p>Invoice #: ${invoice._id}</p>
-        <p>Date: ${new Date(invoice.date).toLocaleDateString()}</p>
+        <p>Invoice #: ${invoiceDetails._id}</p>
+        <p>Date: ${new Date()}</p>
       </div>
     </div>
     <table>
@@ -138,7 +139,7 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
         </tr>
       </thead>
       <tbody>
-        ${invoice.products.map(product => `
+        ${invoiceDetails.products.map(product => `
           <tr>
             <td>${product.name}</td>
             <td>${product.quantity}</td>
@@ -149,9 +150,9 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
       </tbody>
     </table>
     <div class="total-section">
-      <p>Total Amount: INR ${invoice.totalAmount.toFixed(2)}</p>
+      <p>Total Amount: INR ${invoiceDetails.totalAmount.toFixed(2)}</p>
       <p>GST: 18%</p>
-      <p>Grand Total: INR ${(invoice.totalAmount + invoice.totalGST).toFixed(2)}</p>
+      <p>Grand Total: INR ${(invoiceDetails.totalAmount + invoiceDetails.totalGST).toFixed(2)}</p>
     </div>
     <div class="terms">
       <p>Terms and Conditions</p>
@@ -202,8 +203,10 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
      
       await invoice.save();
 
-      const user = User.findOne(userId);
+      const user = await User.findById(userId);
+      console.log("user is ",user.name);
       const invoiceDetails = {
+        _id:invoice._id,
         name:user.name,
         email:user.email,
         products:invoiceProducts,
@@ -211,6 +214,7 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
         totalGST
       }
       // Update the product quantities
+      console.log("invoice name is ",invoiceDetails.name);
       await Promise.all(products.map(product => {
         const quantity = cart[product._id];
         product.quantity -= quantity;
@@ -226,6 +230,7 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
       // Generate PDF using Puppeteer
       const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
       const page = await browser.newPage();
+      console.log(invoiceDetails);
       const content = generateInvoiceHTML(invoiceDetails); // Implement generateInvoiceHTML to return the HTML content for the invoice
       await page.setContent(content, { waitUntil: 'networkidle0' });
       const pdfBuffer = await page.pdf({ format: 'A4', timeout: 60000 }); // Increased timeout to 60 seconds

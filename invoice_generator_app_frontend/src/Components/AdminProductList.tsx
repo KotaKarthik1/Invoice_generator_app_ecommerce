@@ -64,45 +64,45 @@ function AdminProductList() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 px-4 py-6">
-      <div className="bg-gray-800 p-6 rounded shadow-md w-full max-w-6xl">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
-            Products
-          </h1>
-          <div className="flex space-x-4">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 py-2 rounded-l focus:outline-none bg-gray-700 text-white"
-            />
-            <button
-              className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline"
-              onClick={() => navigate('/AddProductList')}
-            >
-              + Add
-            </button>
-          </div>
-          <button
-            className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded"
-            onClick={logout}
-          >
-            Logout
-          </button>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              onProductUpdate={handleProductUpdate}
-              onProductRemove={handleProductRemove}
-            />
-          ))}
-        </div>
+  <div className="bg-gray-800 p-6 rounded shadow-md w-full max-w-6xl">
+    <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
+        Products
+      </h1>
+      <div className="flex items-center w-full md:w-auto mb-4 md:mb-0">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 rounded-l focus:outline-none bg-gray-700 text-white"
+        />
+        <button
+          className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline ml-2 md:ml-0"
+          onClick={() => navigate("/AddProductList")}
+        >
+          + Add
+        </button>
       </div>
+      <button
+        className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded"
+        onClick={logout}
+      >
+        Logout
+      </button>
     </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {filteredProducts.map((product) => (
+        <ProductCard
+          key={product._id}
+          product={product}
+          onProductUpdate={handleProductUpdate}
+          onProductRemove={handleProductRemove}
+        />
+      ))}
+    </div>
+  </div>
+</div>
   );
 }
 
