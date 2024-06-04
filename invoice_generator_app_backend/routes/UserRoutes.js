@@ -165,10 +165,91 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
     `;
   };
   
+  // router.post('/generateInvoice', authenticateToken, async (req, res) => {
+  //   const userId = req.user.id;
+  //   const cart = req.body.cart; // cart is expected to be an object with productId and quantity
+    
+  //   try {
+  //     // Fetch products from the cart
+  //     const products = await ProductModel.find({ _id: { $in: Object.keys(cart) } });
+  
+  //     // Calculate the total amount and GST
+  //     let totalAmount = 0;
+  //     let totalGST = 0;
+  //     const invoiceProducts = products.map(product => {
+  //       const quantity = cart[product._id];
+  //       const rate = product.price;
+  //       const total = rate * quantity;
+  //       const gst = total * 0.18; // Assuming 18% GST
+  //       totalAmount += total;
+  //       totalGST += gst;
+  
+  //       return {
+  //         name: product.name,
+  //         quantity,
+  //         rate,
+  //         total,
+  //         gst
+  //       };
+  //     });
+  
+  //     // Create the invoice
+  //     const invoice = new Invoice({
+  //       user: new mongoose.Types.ObjectId(userId),
+  //       products: invoiceProducts,
+  //       totalAmount,
+  //       totalGST
+  //     });
+     
+  //     await invoice.save();
+
+  //     const user = await User.findById(userId);
+  //     console.log("user is ",user.name);
+  //     const invoiceDetails = {
+  //       _id:invoice._id,
+  //       name:user.name,
+  //       email:user.email,
+  //       products:invoiceProducts,
+  //       totalAmount,
+  //       totalGST
+  //     }
+  //     // Update the product quantities
+  //     console.log("invoice name is ",invoiceDetails.name);
+  //     await Promise.all(products.map(product => {
+  //       const quantity = cart[product._id];
+  //       product.quantity -= quantity;
+  //       return product.save();
+  //     }));
+  
+  //     // Save the order information to the user's collection (assuming user collection has orders array)
+  //     await User.updateOne(
+  //       { _id: userId },
+  //       { $push: { orders: invoice._id } }
+  //     );
+  
+  //     // Generate PDF using Puppeteer
+  //     const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  //     const page = await browser.newPage();
+  //     console.log(invoiceDetails);
+  //     const content = generateInvoiceHTML(invoiceDetails); // Implement generateInvoiceHTML to return the HTML content for the invoice
+  //     await page.setContent(content, { waitUntil: 'networkidle0' });
+  //     const pdfBuffer = await page.pdf({ format: 'A4', timeout: 60000 }); // Increased timeout to 60 seconds
+  //     await browser.close();
+  
+  //     res.setHeader('Content-Type', 'application/pdf');
+  //     res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+  //     res.send(pdfBuffer);
+  
+  //   } catch (error) {
+  //     console.error('Error generating invoice:', error);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //   }
+  // });
+
   router.post('/generateInvoice', authenticateToken, async (req, res) => {
     const userId = req.user.id;
     const cart = req.body.cart; // cart is expected to be an object with productId and quantity
-    
+  
     try {
       // Fetch products from the cart
       const products = await ProductModel.find({ _id: { $in: Object.keys(cart) } });
@@ -202,19 +283,18 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
       });
      
       await invoice.save();
-
+  
       const user = await User.findById(userId);
-      console.log("user is ",user.name);
       const invoiceDetails = {
-        _id:invoice._id,
-        name:user.name,
-        email:user.email,
-        products:invoiceProducts,
+        _id: invoice._id,
+        name: user.name,
+        email: user.email,
+        products: invoiceProducts,
         totalAmount,
         totalGST
-      }
+      };
+  
       // Update the product quantities
-      console.log("invoice name is ",invoiceDetails.name);
       await Promise.all(products.map(product => {
         const quantity = cart[product._id];
         product.quantity -= quantity;
@@ -228,12 +308,11 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
       );
   
       // Generate PDF using Puppeteer
-      const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+      const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
       const page = await browser.newPage();
-      console.log(invoiceDetails);
-      const content = generateInvoiceHTML(invoiceDetails); // Implement generateInvoiceHTML to return the HTML content for the invoice
+      const content = generateInvoiceHTML(invoiceDetails);
       await page.setContent(content, { waitUntil: 'networkidle0' });
-      const pdfBuffer = await page.pdf({ format: 'A4', timeout: 60000 }); // Increased timeout to 60 seconds
+      const pdfBuffer = await page.pdf({ format: 'A4', timeout: 60000 });
       await browser.close();
   
       res.setHeader('Content-Type', 'application/pdf');
@@ -245,7 +324,7 @@ router.get("/getProductsUser", authenticateToken, async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-
+  
   router.get('/orders', authenticateToken,async (req, res) => {
     const userId = req.query.id;
     console.log(req.query)
